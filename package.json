@@ -1,0 +1,25 @@
+{
+  "name": "r2-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && chmod +x dist/r2-cli.js && mv dist/r2-cli.js dist/r2-cli",
+    "start": "node dist/r2-cli.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/r2-cli.ts"
+  },
+  "keywords": [],
+  "author": "Ryan Schachte",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.621.0",
+    "aws-sdk": "^2.1665.0",
+    "aws4fetch": "^1.0.20",
+    "axios": "^1.7.4",
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
+    "fs": "^0.0.1-security",
+    "log4js": "^6.9.1",
+    "ts-node-dev": "^2.0.0"
+  }
+}
