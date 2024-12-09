@@ -27,6 +27,7 @@ const endpoint = process.env.ENDPOINT_URL;
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
 const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
 const debug = process.env.DEBUG === 'true';
+const replace_underscores_with_dashes = process.env.REPLACE_UNDERSCORES_WITH_DASHES === 'true' || true;
 
 log4js.configure({
   appenders: { out: { type: "stdout" } },
@@ -51,11 +52,22 @@ const s3Client = new S3Client({
   forcePathStyle: true,
 });
 
+if (debug) {
+  console.log('ENDPOINT_URL', endpoint);
+  console.log('AWS_ACCESS_KEY_ID', accessKeyId);
+  console.log('AWS_SECRET_ACCESS_KEY', secretAccessKey);
+  console.log('DEBUG', debug);
+  console.log('REPLACE_UNDERSCORES_WITH_DASHES', replace_underscores_with_dashes);
+}
+
 const addCustomHeaderMiddleware = (next: any) => async (args: any) => {
   // Add any environment variables prefixed with S3_CLI_HTTP as headers
   Object.entries(process.env).forEach(([key, value]) => {
     if (key.startsWith('S3_CLI_HTTP')) {
-      const headerKey = key.replace('S3_CLI_HTTP_', '').toLowerCase();
+      let headerKey = key.replace('S3_CLI_HTTP_', '').toLowerCase();
+      if (replace_underscores_with_dashes) {
+        headerKey = headerKey.replace(/_/g, '-');
+      }
       if (debug) {
         console.debug(`[DEBUG] Adding header: ${headerKey} = ${value}`);
       }
